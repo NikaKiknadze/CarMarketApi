@@ -4,6 +4,7 @@ using CarMarketApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarMarketApi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20231209095628_Changes")]
+    partial class Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,6 @@ namespace CarMarketApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BuyerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -69,11 +69,14 @@ namespace CarMarketApi.Migrations
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BuyerId")
+                    b.HasIndex("UserId")
                         .IsUnique()
-                        .HasFilter("[BuyerId] IS NOT NULL");
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("BuyersPersonalInformations", "market");
                 });
@@ -185,7 +188,7 @@ namespace CarMarketApi.Migrations
                 {
                     b.HasOne("CarMarketApi.Entities.Buyer", "Buyer")
                         .WithOne("PersonalInformation")
-                        .HasForeignKey("CarMarketApi.Entities.BuyerPersonalInformation", "BuyerId");
+                        .HasForeignKey("CarMarketApi.Entities.BuyerPersonalInformation", "UserId");
 
                     b.Navigation("Buyer");
                 });

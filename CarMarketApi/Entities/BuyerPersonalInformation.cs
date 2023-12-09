@@ -12,7 +12,8 @@ namespace CarMarketApi.Entities
         public int PhoneNumber { get; set; }
         [EmailAddress]
         public string EmailAddress { get; set; }
-        [ForeignKey("UserId")]
+        [ForeignKey("BuyerId")]
+        public int? BuyerId { get; set; }
         public virtual Buyer? Buyer { get; set; }
 
     }
