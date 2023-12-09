@@ -8,35 +8,24 @@ namespace CarMarketApi.Data
         public Context(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<User> Users { get; set; }
-        public DbSet<User> Cars { get; set; }
-        public DbSet<User> Sellers { get; set; }
-        public DbSet<User> PrivateInformations { get; set; }
-        public DbSet<User> SellerUserJoin { get; set; }
+        public DbSet<Buyer> Buyers { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Seller> Sellers { get; set; }
+        public DbSet<BuyerPersonalInformation> BuyersPersonalInformations { get; set; }
+        public DbSet<SellerPersonalInformation> SellersPersonalInformations { get; set; }
+        public DbSet<SellersBuyersJoin> SellersBuyersJoin { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SellersUsersJoin>()
-                .HasKey(n => new { n.UserId, n.SellerId });
-            modelBuilder.Entity<SellersUsersJoin>()
-                .HasOne(u => u.User)
-                .WithMany(su => su.SellersUsers)
-                .HasForeignKey(u => u.UserId);
-            modelBuilder.Entity<SellersUsersJoin>()
+            modelBuilder.Entity<SellersBuyersJoin>()
+                .HasKey(n => new { n.BuyerId, n.SellerId });
+            modelBuilder.Entity<SellersBuyersJoin>()
+                .HasOne(u => u.Buyer)
+                .WithMany(su => su.SellersBuyers)
+                .HasForeignKey(u => u.BuyerId);
+            modelBuilder.Entity<SellersBuyersJoin>()
                 .HasOne(s => s.Seller)
-                .WithMany(su => su.SellersUsers)
+                .WithMany(su => su.SellersBuyers)
                 .HasForeignKey(s => s.SellerId);
-
-            modelBuilder.Entity<User>()
-                .HasOne(pi => pi.PrivateInformation)
-                .WithOne(pi => pi.User)
-                .HasForeignKey<PrivateInformation>(pi => pi.UserId);
-
-            modelBuilder.Entity<Seller>()
-                .HasOne(pi => pi.PrivateInformation)
-                .WithOne(pi => pi.Seller)
-                .HasForeignKey<PrivateInformation>(pi => pi.SellerId);
-
-
 
             base.OnModelCreating(modelBuilder); 
         }
