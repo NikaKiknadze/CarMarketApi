@@ -13,6 +13,7 @@ namespace CarMarketApi.Entities
         [EmailAddress]
         public string EmailAddress { get; set; }
         [ForeignKey("SellerId")]
+        public int? SellerId { get; set; }
         public virtual Seller? Seller { get; set; }
     }
 }

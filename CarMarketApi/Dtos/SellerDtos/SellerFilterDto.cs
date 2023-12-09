@@ -14,6 +14,6 @@
 
         public List<int>? ItemIds { get; set; }
 
-        public int? PersonalInformationIds { get; set; }
+        public int? PersonalInformationId { get; set; }
     }
 }

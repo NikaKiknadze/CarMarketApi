@@ -13,9 +13,10 @@ namespace CarMarketApi.Entities
         [MaxLength(20)]
         public string Surname { get; set; }
         public int Age { get; set; }
+        [ForeignKey("PersonalInformationId")]
+        public int? PersonalIformationId { get; set; }
 
         public virtual ICollection<Item> Items { get; set; }
-        [ForeignKey("PersonalInformationId")]
         public virtual BuyerPersonalInformation? PersonalInformation { get; set; }
         public virtual ICollection<SellersBuyersJoin>? SellersBuyers { get; set; }
     }
