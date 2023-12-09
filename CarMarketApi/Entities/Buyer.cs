@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarMarketApi.Entities
 {
-    [Table("Sellers", Schema = "market")]
-    public class Seller
+    [Table("Buyers", Schema = "market")]
+    public class Buyer
     {
         [Key]
         public int Id { get; set; }
@@ -13,9 +13,10 @@ namespace CarMarketApi.Entities
         [MaxLength(20)]
         public string Surname { get; set; }
         public int Age { get; set; }
-        [ForeignKey("PersonalInformationId")]
-        public virtual SellerPersonalInformation? SellerPersonalInformation { get; set; }
-        public virtual ICollection<SellersBuyersJoin>? SellersBuyers {  get; set; }
+
         public virtual ICollection<Item> Items { get; set; }
+        [ForeignKey("PersonalInformationId")]
+        public virtual BuyerPersonalInformation? PersonalInformation { get; set; }
+        public virtual ICollection<SellersBuyersJoin>? SellersBuyers { get; set; }
     }
 }

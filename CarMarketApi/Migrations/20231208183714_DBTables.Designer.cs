@@ -4,6 +4,7 @@ using CarMarketApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarMarketApi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20231208183714_DBTables")]
+    partial class DBTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +81,7 @@ namespace CarMarketApi.Migrations
                     b.ToTable("BuyersPersonalInformations", "market");
                 });
 
-            modelBuilder.Entity("CarMarketApi.Entities.Item", b =>
+            modelBuilder.Entity("CarMarketApi.Entities.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,7 +110,7 @@ namespace CarMarketApi.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Items", "market");
+                    b.ToTable("Cars", "market");
                 });
 
             modelBuilder.Entity("CarMarketApi.Entities.Seller", b =>
@@ -199,14 +202,14 @@ namespace CarMarketApi.Migrations
                     b.Navigation("Buyer");
                 });
 
-            modelBuilder.Entity("CarMarketApi.Entities.Item", b =>
+            modelBuilder.Entity("CarMarketApi.Entities.Car", b =>
                 {
                     b.HasOne("CarMarketApi.Entities.Buyer", "Buyer")
-                        .WithMany("Items")
+                        .WithMany("Cars")
                         .HasForeignKey("BuyerId");
 
                     b.HasOne("CarMarketApi.Entities.Seller", "Seller")
-                        .WithMany("Items")
+                        .WithMany("Cars")
                         .HasForeignKey("SellerId");
 
                     b.Navigation("Buyer");
@@ -253,14 +256,14 @@ namespace CarMarketApi.Migrations
 
             modelBuilder.Entity("CarMarketApi.Entities.Buyer", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Cars");
 
                     b.Navigation("SellersBuyers");
                 });
 
             modelBuilder.Entity("CarMarketApi.Entities.Seller", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Cars");
 
                     b.Navigation("SellersBuyers");
                 });
