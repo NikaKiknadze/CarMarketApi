@@ -53,7 +53,7 @@ namespace CarMarketApi.Repository.AllRepositories
             var existingItem = await _context.Items.FirstOrDefaultAsync(i => i.Id == updatedItem.Id, cancellationToken);
             if (existingItem == null)
             {
-                return false;
+                throw new CustomExceptions.NotFoundException("Items not found");
             }
             existingItem.Type = updatedItem.Type;
             existingItem.Cost = updatedItem.Cost;
@@ -66,7 +66,7 @@ namespace CarMarketApi.Repository.AllRepositories
             var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId, cancellationToken);
             if (item == null)
             {
-                return false;
+                throw new CustomExceptions.NotFoundException("Items not found");
             }
             _context.Items.Remove(item);
             

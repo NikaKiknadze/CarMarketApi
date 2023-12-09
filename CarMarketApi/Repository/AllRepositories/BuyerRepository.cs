@@ -55,7 +55,7 @@ namespace CarMarketApi.Repository.AllRepositories
 
             if (existingBuyer == null)
             {
-                return false;
+                throw new CustomExceptions.NoContentException("Buyers not found");
             }
 
             existingBuyer.Name = updatedBuyer.Name;
@@ -71,7 +71,7 @@ namespace CarMarketApi.Repository.AllRepositories
 
             if(buyer == null)
             {
-                return false;
+                throw new CustomExceptions.NoContentException("Buyers not found");
             }
 
             _context.Buyers.Remove(buyer);
@@ -86,7 +86,7 @@ namespace CarMarketApi.Repository.AllRepositories
 
             if(sellersBuyers == null)
             {
-                return false;
+                throw new CustomExceptions.NoContentException("Buyers not found");
             }
 
             _context.SellersBuyersJoin.RemoveRange(sellersBuyers);

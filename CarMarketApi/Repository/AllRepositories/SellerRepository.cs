@@ -54,7 +54,7 @@ namespace CarMarketApi.Repository.AllRepositories
             var existingSeller = await _context.Sellers.FirstOrDefaultAsync(s => s.Id == updatedSeller.Id, cancellationToken);
             if(existingSeller == null)
             {
-                return false;
+                throw new CustomExceptions.NotFoundException("Sellers not found");
             }
 
             existingSeller.Name = updatedSeller.Name;
@@ -69,7 +69,7 @@ namespace CarMarketApi.Repository.AllRepositories
             var seller = await _context.Sellers.FirstOrDefaultAsync(s => s.Id == sellerId, cancellationToken);
             if(seller == null)
             {
-                return false;
+                throw new CustomExceptions.NotFoundException("Sellers not found");
             }
             _context.Sellers.Remove(seller);
             return true;
@@ -82,7 +82,7 @@ namespace CarMarketApi.Repository.AllRepositories
                                               .ToListAsync(cancellationToken);
             if (sellersBuyers == null)
             {
-                return false;
+                throw new CustomExceptions.NotFoundException("Sellers not found");
             }
 
             _context.SellersBuyersJoin.RemoveRange(sellersBuyers);
