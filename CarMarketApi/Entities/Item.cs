@@ -12,6 +12,10 @@ namespace CarMarketApi.Entities
         public string Type { get; set; }
         [MaxLength(20)]
         public int Cost { get; set; }
+        [ForeignKey("Seller")]
+        public int? SellerId { get; set; }
+        [ForeignKey("Buyer")]
+        public int? BuyerId { get; set; }
 
         public virtual Seller? Seller { get; set; }
         public virtual Buyer? Buyer { get; set; }

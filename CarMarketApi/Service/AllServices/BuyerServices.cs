@@ -94,11 +94,11 @@ namespace CarMarketApi.Service.AllServices
             {
                 buyers = buyers.Where(b => b.Id == filter.Id);
             }
-            if (filter.Name.IsNullOrEmpty())
+            if (!filter.Name.IsNullOrEmpty())
             {
                 buyers = buyers.Where(b => b.Name.Contains(filter.Name));
             }
-            if (filter.Surname.IsNullOrEmpty())
+            if (!filter.Surname.IsNullOrEmpty())
             {
                 buyers = buyers.Where(b => b.Surname.Contains(filter.Surname));
             }
@@ -108,7 +108,7 @@ namespace CarMarketApi.Service.AllServices
             }
             if (filter.PersonalInformationId != null)
             {
-                buyers = buyers.Where(b => b.PersonalIformationId == filter.PersonalInformationId);
+                buyers = buyers.Where(b => b.PersonalInformation.Id == filter.PersonalInformationId);
             }
             if (filter.SellerIds != null && filter.SellerIds.Any())
             {
@@ -171,11 +171,11 @@ namespace CarMarketApi.Service.AllServices
             }
 
             var personalIformation = await _context.BuyersPersonalInformations
-                                                   .Where(pi => pi.BuyerId == buyer.Id)
+                                                   .Where(pi => pi.Buyer.Id == buyer.Id)
                                                    .FirstOrDefaultAsync(cancellationToken);
             if (personalIformation != null)
             {
-                buyer.PersonalIformationId = personalIformation.Id;
+                buyer.PersonalInformation.Id = personalIformation.Id;
             }
 
 
@@ -242,11 +242,44 @@ namespace CarMarketApi.Service.AllServices
                                         .Where(b => b.Id == input.Id)
                                         .FirstOrDefaultAsync(cancellationToken);
             buyer.Id = input.Id.HasValue ? (int)input.Id.Value : buyer.Id;
-            buyer.Name = input.Name.IsNullOrEmpty() ? input.Name : buyer.Name;
-            buyer.Surname = input.Surname.IsNullOrEmpty() ? input.Surname : buyer.Surname;
+            if(input.Name != null)
+            {
+                buyer.Name = input.Name;
+            }
+            else
+            {
+                buyer.Name = buyer.Name;
+            }
+            if(input.Surname != null)
+            {
+                buyer.Surname = input.Surname;
+            }
+            else
+            {
+                buyer.Surname = buyer.Surname;
+            }
             buyer.Age = input.Age.HasValue ? (int)input.Age.Value : buyer.Age;
-            buyer.PersonalInformation.PhoneNumber = input.PhoneNumber.HasValue ? (int)input.PhoneNumber.Value : buyer.PersonalInformation.PhoneNumber;
-            buyer.PersonalInformation.EmailAddress = input.EmailAddress.IsNullOrEmpty() ? input.EmailAddress : buyer.PersonalInformation.EmailAddress;
+            if(buyer.PersonalIformationId == null)
+            {
+                buyer.PersonalInformation = new BuyerPersonalInformation
+                {
+                    PhoneNumber = (int)input.PhoneNumber,
+                    EmailAddress = input.EmailAddress
+                };
+            }
+            else
+            {
+                buyer.PersonalInformation.PhoneNumber = input.PhoneNumber.HasValue ? (int)input.PhoneNumber.Value : buyer.PersonalInformation.PhoneNumber;
+                if (input.EmailAddress != null)
+                {
+                    buyer.PersonalInformation.EmailAddress = input.EmailAddress;
+                }
+                else
+                {
+                    buyer.PersonalInformation.EmailAddress = buyer.PersonalInformation.EmailAddress;
+                }
+            }
+            
 
 
             await _repository.BuyerRepository.UpdateBuyerAsync(buyer, cancellationToken);

@@ -83,7 +83,7 @@ namespace CarMarketApi.Service.AllServices
             {
                 items = items.Where(i => i.Id == filter.Id);
             }
-            if (filter.Type.IsNullOrEmpty())
+            if (!filter.Type.IsNullOrEmpty())
             {
                 items = items.Where(i => i.Type.Contains(filter.Type));
             }
@@ -107,21 +107,10 @@ namespace CarMarketApi.Service.AllServices
             var item = new Item
             {
                 Type = input.Type,
-                Cost = (int)input.Cost
+                Cost = (int)input.Cost,
+                BuyerId = input.BuyerId,
+                SellerId = input.SellerId
             };
-
-            if (input.SellerId != null )
-            {
-                item.Seller = new Seller();
-
-                item.Seller.Id = (int)input.SellerId;
-            }
-            if (input.BuyerId != null)
-            {
-                item.Buyer = new Buyer();
-
-                item.Buyer.Id = (int)input.BuyerId;
-            }
 
 
             await _repository.ItemRepository.CreateItemAsync(item, cancellationToken);
@@ -177,7 +166,14 @@ namespace CarMarketApi.Service.AllServices
                                         .Where(b => b.Id == input.Id)
                                         .FirstOrDefaultAsync(cancellationToken);
             item.Id = input.Id.HasValue ? (int)input.Id.Value : item.Id;
-            item.Type = input.Type.IsNullOrEmpty() ? input.Type : item.Type;
+            if(input.Type != null)
+            {
+                item.Type = input.Type;
+            }
+            else
+            {
+                item.Type = item.Type;
+            }
             item.Cost = input.Cost.HasValue ? (int)input.Cost.Value : item.Cost;
 
 
@@ -200,7 +196,7 @@ namespace CarMarketApi.Service.AllServices
 
             await _repository.ItemRepository.SaveChangesAsync(cancellationToken);
 
-            return CustomApiResponses<string>.SuccesResult("Buyer changed successfully");
+            return CustomApiResponses<string>.SuccesResult("Item changed successfully");
         }
 
         public async Task<CustomApiResponses<string>> DeleteItemAsync(int itemId, CancellationToken cancellationToken)
